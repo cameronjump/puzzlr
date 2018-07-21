@@ -21,37 +21,29 @@ def split2DArrayIntoFour(arr):
     # top left array
     splice = []
     for i in range(0, half_length):
-        temp = []
         for j in range(0, half_width):
-            temp.append(arr[i][j])
-        splice.append(temp)
+            splice.append(arr[i][j])
     splicedArray.append(splice)
 
     # top right array
     splice = []
     for i in range(half_length, length):
-        temp = []
         for j in range(0, half_width):
-            temp.append(arr[i][j])
-        splice.append(temp)
+            splice.append(arr[i][j])
     splicedArray.append(splice)
 
     # bottom left array
     splice = []
     for i in range(0, half_length):
-        temp = []
         for j in range(half_width, width):
-            temp.append(arr[i][j])
-        splice.append(temp)
+            splice.append(arr[i][j])
     splicedArray.append(splice)
 
     # bottom right array
     splice = []
     for i in range(half_length, length):
-        temp = []
         for j in range(half_width, width):
-            temp.append(arr[i][j])
-        splice.append(temp)
+            splice.append(arr[i][j])
     splicedArray.append(splice)
 
 
