@@ -12,6 +12,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Frisbee {
@@ -20,31 +23,38 @@ public class Frisbee {
 
     public static String uploadFile(String path) {
 
+        String name = "puzzlr" + new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(new Date());
+
         File file = new File(path);
         if (file.exists()) {
-            String requestId = MediaManager.get().upload(path).dispatch();
-            Log.d(TAG, requestId);
-            return requestId;
+            String requestId = MediaManager.get().upload(path).option("public_id", name).dispatch();
+            Log.d(TAG, name);
+            return name;
         } else {
             Log.d(TAG, path + "not found");
             return "File not found";
         }
     }
 
-    public static void uploadAndNotifyFlask(String path, int pieces) {
+    public static void uploadAndNotifyFlask(String path, int pieces, String type) {
         String id = uploadFile(path);
         try {
             JSONObject json = new JSONObject();
             json.put("id", id);
-            json.put("pieces", pieces);
-            notifyFlask(json);
+            if (type.equals("ref")) json.put("num_pieces", pieces);
+            notifyFlask(json, getURL(type));
         }
         catch (JSONException e) {
-            ;
+            Log.d(TAG, e.toString());
         }
     }
 
-    public static void notifyFlask(final JSONObject json) {
+    private static String getURL(String type) {
+        if (type.equals("piece")) return new URL("https://dry-falls-41246.herokuapp.com/process_image");
+        else return "https://dry-falls-41246.herokuapp.com/upload_puzzle_board"
+    }
+
+    public static void notifyFlask(final JSONObject json, URL url) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {

@@ -93,7 +93,7 @@ public class PieceMatchActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter number of pieces.", Toast.LENGTH_SHORT).show();
         }
         else {
-            Frisbee.uploadAndNotifyFlask(imagePath, Integer.parseInt(number));
+            Frisbee.uploadAndNotifyFlask(imagePath, Integer.parseInt(number), "ref");
         }
     }
 
