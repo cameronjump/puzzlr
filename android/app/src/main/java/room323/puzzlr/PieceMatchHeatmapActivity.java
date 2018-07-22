@@ -17,6 +17,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -31,12 +33,14 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static java.security.AccessController.getContext;
+
 public class PieceMatchHeatmapActivity extends AppCompatActivity {
 
     private static final String TAG = "HeatmapActivity";
     ImageView imageview;
     String imagePath;
-    TableLayout table;
+    GridLayout table;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +52,7 @@ public class PieceMatchHeatmapActivity extends AppCompatActivity {
         }
 
         table = findViewById(R.id.heatmap);
-        createHeatmap();
+        createHeatmap(MyUtils.createDummyArray());
 
         imageview = findViewById(R.id.pieceimage);
         imageview.setOnClickListener(new View.OnClickListener() {
@@ -61,21 +65,25 @@ public class PieceMatchHeatmapActivity extends AppCompatActivity {
 
     }
 
-    public void createHeatmap() {
+    public void createHeatmap(double[][] f) {
 
-        double[][] f = MyUtils.f;
+        //double[][] f = MyUtils.f;
+        table.setColumnCount(f[0].length);
+        table.setRowCount(f.length);
 
+        int c = 0;
         for (int i = 0; i < f.length; i++) {
-            TableRow rowHeader = new TableRow(this);
             for (int j = 0; j < f[0].length; j++) {
                 EditText box = new EditText(this);
-                box.setBackgroundColor(MyUtils.getColor(f[i][j]));
+                android.widget.TableRow.LayoutParams p = new android.widget.TableRow.LayoutParams();
+                box.setLayoutParams(p);
+                box.setBackgroundColor(getColor(MyUtils.getColor(f[i][j])));
                 box.setWidth(40);
                 box.setHeight(40);
                 box.setPadding(20, 20, 20, 20);
-                rowHeader.addView(box);
+                table.addView(box, c);
+                c = c+1;
             }
-            table.addView(rowHeader);
         }
     }
 

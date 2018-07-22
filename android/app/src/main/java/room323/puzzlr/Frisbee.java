@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -45,6 +46,7 @@ public class Frisbee {
             json.put("id", pieceid);
             json.put("puzzle_id", refid);
             json.put("num_pieces", pieces);
+            Log.d(TAG, json.toString());
             notifyFlask(json);
         }
         catch (JSONException e) {
@@ -60,13 +62,13 @@ public class Frisbee {
                     URL url = new URL("https://intense-ocean-43816.herokuapp.com/process_image");
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                    //conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
                     conn.setRequestProperty("Accept", "application/json");
                     conn.setDoOutput(true);
                     conn.setDoInput(true);
 
                     DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-                    //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
+                    os.writeBytes(URLEncoder.encode(json.toString(), "UTF-8"));
                     os.writeBytes(json.toString());
 
                     os.flush();
