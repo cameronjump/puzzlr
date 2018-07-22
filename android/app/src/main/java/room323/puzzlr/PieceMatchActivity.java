@@ -146,7 +146,7 @@ public class PieceMatchActivity extends AppCompatActivity {
                 imageBitmap = BitmapFactory.decodeFile(getRealPathFromURI(selectedImage), options);
                 imageview.setImageBitmap(imageBitmap);
                 Log.d("Frisbee", getRealPathFromURI(selectedImage));
-                uploadFile(getRealPathFromURI(selectedImage));
+                Frisbee.uploadFile(getRealPathFromURI(selectedImage));
             }
         }
     }
@@ -195,16 +195,6 @@ public class PieceMatchActivity extends AppCompatActivity {
         return temp;
     }
 
-    private void uploadFile(String path) {
-
-        File file = new File(path);
-        if (file.exists()) {
-            String requestId = MediaManager.get().upload(path).dispatch();
-            Log.d("Frisbee", requestId);
-        } else {
-            Log.d("Frisbee", path + "not found");
-        }
-    }
 
 }
 
