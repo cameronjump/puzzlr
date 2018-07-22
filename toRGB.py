@@ -8,16 +8,20 @@ from skimage.measure import compare_mse as mse
 import numpy as np
 from functools import reduce
 
-
-# takes list of pixels and image width to make embedded list of rows
+"""
+takes list of pixels and image width to make embedded list of rows
+"""
 def formatImageInto2dArray(width, pixels):
 	splitImage = []
 	for i in range(0,len(pixels), width):
 		splitImage.append(pixels[i:i+(width-1)])
 	return splitImage
 
-# averages rgb values to smaller pixel number
-# numSquares must be a perfect square
+
+"""
+averages rgb values to smaller pixel number
+numSquares must be a perfect square
+"""
 def compress2dArray(box):
 	Rtotal = 0
 	Gtotal = 0
@@ -38,6 +42,9 @@ def compress2dArray(box):
 	pixel = [Ravg, Gavg, Bavg]
 	return pixel
 
+"""
+returns the mean squared error similarity value between images or equal size
+"""	
 def computeSimilarity(imgA, imgB):
 	instanceImgA = []
 	instanceImgB = []
@@ -55,7 +62,9 @@ def computeSimilarity(imgA, imgB):
 
 	return mse(imageA, imageB)
 
-#normalize mse vals
+"""
+normalize mse vals, format into 2d array
+"""
 def normalize(similarities, N):
 	maximum = max(similarities)
 	heats = [val / maximum for val in similarities]
@@ -135,74 +144,83 @@ def divide2dArrayIntoNSubArrays(arr, N):
     return arrayOfBoxes
 
 
-piecepic90 = requests.get('http://res.cloudinary.com/puzzlr/image/upload/e_make_transparent:25/e_trim/ar_1:1,c_crop/a_90/piece.jpg')
-piecepic180 = requests.get('http://res.cloudinary.com/puzzlr/image/upload/e_make_transparent:25/e_trim/ar_1:1,c_crop/a_180/piece.jpg')
-piecepic270 = requests.get('http://res.cloudinary.com/puzzlr/image/upload/e_make_transparent:25/e_trim/ar_1:1,c_crop/a_270/piece.jpg')
-piecepic = requests.get('http://res.cloudinary.com/puzzlr/image/upload/e_make_transparent:25/e_trim/ar_1:1,c_crop/piece.jpg')
 
-
+"""
+gets rgb from image
+"""
 def imageFormatter(piecepic):
 	piece = Image.open(BytesIO(piecepic.content))
 	pixelspiece = list(piece.getdata())
 	widthpiece, heightpiece = piece.size
 	return formatImageInto2dArray(widthpiece, pixelspiece)
 
-puzzlepic = requests.get('http://res.cloudinary.com/puzzlr/image/upload/puzzle.jpg')
-puzzle = Image.open(BytesIO(puzzlepic.content))
-pixelspuzzle = list(puzzle.getdata())
-widthpuzzle, heightpuzzle = puzzle.size
-
-pieceFormatted = imageFormatter(piecepic)
-pieceFormatted90 = imageFormatter(piecepic90)
-pieceFormatted180 = imageFormatter(piecepic180)
-pieceFormatted270 = imageFormatter(piecepic270)
-
-puzzleFormatted = formatImageInto2dArray(widthpuzzle, pixelspuzzle)
-
-boxesPiece = divide2dArrayIntoNSubArrays(pieceFormatted, 32)
-boxesPiece90 = divide2dArrayIntoNSubArrays(pieceFormatted90, 32)
-boxesPiece180 = divide2dArrayIntoNSubArrays(pieceFormatted180, 32)
-boxesPiece270 = divide2dArrayIntoNSubArrays(pieceFormatted270, 32)
-
-boxesPuzzle = divide2dArrayIntoNSubArrays(puzzleFormatted, 300)
-
-pieceArray = []
-pieceArray90 = []
-pieceArray180 = []
-pieceArray270 = []
-
-for box in boxesPiece:
-	pieceArray.append(compress2dArray(box))
-
-for box in boxesPiece90:
-	pieceArray90.append(compress2dArray(box))
-
-for box in boxesPiece180:
-	pieceArray180.append(compress2dArray(box))
-
-for box in boxesPiece270:
-	pieceArray270.append(compress2dArray(box))
 
 
-allPieces = []
-for piece in boxesPuzzle:
-	squashedPiece = []
-	simplePiece = divide2dArrayIntoNSubArrays(piece, 32)
-	for box in simplePiece:
-		squashedPiece.append(compress2dArray(box))
-	allPieces.append(squashedPiece)
 
-similarities = []
-for piece in allPieces:
-	sindex = max(computeSimilarity(pieceArray, piece),computeSimilarity(pieceArray90, piece),
-		computeSimilarity(pieceArray180, piece),computeSimilarity(pieceArray270, piece))
-	similarities.append(sindex)
+def main(numpieces, puzzleID, imageID, resolution):
 
-heatmap = normalize(similarities, 300)
-
-print(heatmap)
-
+	#image urls for rotation
+	piecepic90 = requests.get('http://res.cloudinary.com/puzzlr/image/upload/e_make_transparent:25/e_trim/ar_1:1,c_crop/a_90/' + imageID + '.jpg')
+	piecepic180 = requests.get('http://res.cloudinary.com/puzzlr/image/upload/e_make_transparent:25/e_trim/ar_1:1,c_crop/a_180/' + imageID + '.jpg')
+	piecepic270 = requests.get('http://res.cloudinary.com/puzzlr/image/upload/e_make_transparent:25/e_trim/ar_1:1,c_crop/a_270/' + imageID + '.jpg')
+	piecepic = requests.get('http://res.cloudinary.com/puzzlr/image/upload/e_make_transparent:25/e_trim/ar_1:1,c_crop/' + imageID + '.jpg')
+	print('http://res.cloudinary.com/puzzlr/image/upload/' + puzzleID + 'jpg')
 	
+	#puzzle url
+	puzzlepic = requests.get('http://res.cloudinary.com/puzzlr/image/upload/' + puzzleID + '.jpg')
+
+
+	pieceFormatted = imageFormatter(piecepic)
+	pieceFormatted90 = imageFormatter(piecepic90)
+	pieceFormatted180 = imageFormatter(piecepic180)
+	pieceFormatted270 = imageFormatter(piecepic270)
+
+	puzzleFormatted = imageFormatter(puzzlepic)
+
+	boxesPiece = divide2dArrayIntoNSubArrays(pieceFormatted, resolution)
+	boxesPiece90 = divide2dArrayIntoNSubArrays(pieceFormatted90, resolution)
+	boxesPiece180 = divide2dArrayIntoNSubArrays(pieceFormatted180, resolution)
+	boxesPiece270 = divide2dArrayIntoNSubArrays(pieceFormatted270, resolution)
+
+	boxesPuzzle = divide2dArrayIntoNSubArrays(puzzleFormatted, numpieces)
+
+	pieceArray = []
+	pieceArray90 = []
+	pieceArray180 = []
+	pieceArray270 = []
+
+	for box in boxesPiece:
+		pieceArray.append(compress2dArray(box))
+
+	for box in boxesPiece90:
+		pieceArray90.append(compress2dArray(box))
+
+	for box in boxesPiece180:
+		pieceArray180.append(compress2dArray(box))
+
+	for box in boxesPiece270:
+		pieceArray270.append(compress2dArray(box))
+
+
+	allPieces = []
+	for piece in boxesPuzzle:
+		squashedPiece = []
+		simplePiece = divide2dArrayIntoNSubArrays(piece, resolution)
+		for box in simplePiece:
+			squashedPiece.append(compress2dArray(box))
+		allPieces.append(squashedPiece)
+
+	similarities = []
+	for piece in allPieces:
+		sindex = max(computeSimilarity(pieceArray, piece),computeSimilarity(pieceArray90, piece),
+			computeSimilarity(pieceArray180, piece),computeSimilarity(pieceArray270, piece))
+		similarities.append(sindex)
+
+	heatmap = normalize(similarities, numpieces)
+
+	return heatmap
+
+main(300, 'puzzle', 'piece', 32)
 
 
 
