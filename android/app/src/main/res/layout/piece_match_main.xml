@@ -7,16 +7,26 @@
     android:paddingRight="16dp"
     android:orientation="vertical" >
 
-    <Button
-        android:text="Upload Picture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/refupload"/>
-
     <ImageView
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/refimage"/>
+        android:id="@+id/refimage"
+        android:src="@drawable/upload"/>
+
+    <EditText
+        android:id="@+id/number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="Number of pieces"/>
+
+    <Button
+        android:id="@+id/upload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Upload"/>
 
 
 </LinearLayout>
