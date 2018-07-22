@@ -8,7 +8,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -18,12 +20,20 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class PieceMatchActivity extends AppCompatActivity {
 
     private static final String TAG = "PieceMatchActivity";
     private ImageView imageview;
+
+    public static String refid;
+    public static String pieceid;
+    public static int pieces;
 
     private String imagePath;
 
@@ -65,18 +75,21 @@ public class PieceMatchActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         if(resultCode == RESULT_OK){
             if (requestCode == 0) {
-                Bundle extras = imageReturnedIntent.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                Uri uri = MyUtils.getImageUri(this, imageBitmap);
-                imageview.setImageURI(uri);
-                imagePath = MyUtils.getRealPathFromURI(this, uri);
-            }
-            else if (requestCode == 1) {
                 Uri selectedImage = imageReturnedIntent.getData();
                 imageview.setImageURI(selectedImage);
                 imagePath = MyUtils.getRealPathFromURI(this, selectedImage);
+                /*Bundle extras = imageReturnedIntent.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                Uri uri = MyUtils.getImageUri(this, imageBitmap);
+                imageview.setImageURI(uri);
+                imagePath = MyUtils.getRealPathFromURI(this, uri);*/
+            }
+            else if (requestCode == 1) {
+                imageview.setImageURI(Uri.parse(imagePath));
+                imageview.setRotation(90);
             }
         }
+        Log.d(TAG, imagePath);
     }
 
     private void upload() {
@@ -93,8 +106,12 @@ public class PieceMatchActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter number of pieces.", Toast.LENGTH_SHORT).show();
         }
         else {
-            Frisbee.uploadAndNotifyFlask(imagePath, Integer.parseInt(number), "ref");
+
+            refid = Frisbee.uploadFile(imagePath);
+            pieces = Integer.parseInt(number);
         }
+        Intent intent = new Intent(PieceMatchActivity.this, PieceMatchHeatmapActivity.class);
+        startActivity(intent);
     }
 
     public void cameraDialog() {
@@ -103,8 +120,7 @@ public class PieceMatchActivity extends AppCompatActivity {
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Camera",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(takePicture, 0);
+                        dispatchTakePictureIntent();
                         dialog.dismiss();
                     }
                 });
@@ -113,7 +129,7 @@ public class PieceMatchActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(pickPhoto , 1);
+                        startActivityForResult(pickPhoto , 0);
                         dialog.dismiss();
                     }
                 });
@@ -124,6 +140,47 @@ public class PieceMatchActivity extends AppCompatActivity {
                     }
                 });
         alertDialog.show();
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir("Pictures");
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        imagePath = image.getAbsolutePath();
+        return image;
+    }
+
+    static final int REQUEST_TAKE_PHOTO = 1;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                ;
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
     }
 
 }

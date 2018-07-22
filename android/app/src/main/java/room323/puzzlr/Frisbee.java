@@ -11,9 +11,9 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -36,30 +36,28 @@ public class Frisbee {
         }
     }
 
-    public static void uploadAndNotifyFlask(String path, int pieces, String type) {
-        String id = uploadFile(path);
+    public static void notifyFlask(String refid, String pieceid, int pieces) {
         try {
             JSONObject json = new JSONObject();
-            json.put("id", id);
-            if (type.equals("ref")) json.put("num_pieces", pieces);
-            notifyFlask(json, getURL(type));
+            Log.d(TAG, pieceid);
+            Log.d(TAG, refid);
+            Log.d(TAG, String.valueOf(pieces));
+            json.put("id", pieceid);
+            json.put("puzzle_id", refid);
+            json.put("num_pieces", pieces);
+            notifyFlask(json);
         }
         catch (JSONException e) {
             Log.d(TAG, e.toString());
         }
     }
 
-    private static String getURL(String type) {
-        if (type.equals("piece")) return new URL("https://dry-falls-41246.herokuapp.com/process_image");
-        else return "https://dry-falls-41246.herokuapp.com/upload_puzzle_board"
-    }
-
-    public static void notifyFlask(final JSONObject json, URL url) {
+    public static void notifyFlask(final JSONObject json) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("https://dry-falls-41246.herokuapp.com/process_image");
+                    URL url = new URL("https://intense-ocean-43816.herokuapp.com/process_image");
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
                     conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
