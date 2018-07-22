@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -41,8 +42,12 @@ public class PieceMatchHeatmapActivity extends AppCompatActivity {
     ImageView imageview;
     String imagePath;
     GridLayout table;
+    ProgressBar progressBar;
 
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.piece_match_heatmap);
         if (checkSelfPermission(Manifest.permission.CAMERA)
@@ -52,7 +57,7 @@ public class PieceMatchHeatmapActivity extends AppCompatActivity {
         }
 
         table = findViewById(R.id.heatmap);
-        createHeatmap(MyUtils.createDummyArray());
+        //createHeatmap(MyUtils.createDummyArray());
 
         imageview = findViewById(R.id.pieceimage);
         imageview.setOnClickListener(new View.OnClickListener() {
@@ -62,17 +67,29 @@ public class PieceMatchHeatmapActivity extends AppCompatActivity {
             }
         });
 
+        progressBar = findViewById(R.id.progressbar);
+    }
 
+    public void runThread(final double[][] d) {
+        PieceMatchHeatmapActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                createHeatmap(d);
+                progressBar.setVisibility(4);
+            }
+        });
     }
 
     public void createHeatmap(double[][] f) {
 
+        table.removeAllViews();
+
         //double[][] f = MyUtils.f;
-        table.setColumnCount(f[0].length);
-        table.setRowCount(f.length);
+        table.setColumnCount(f.length);
+        table.setRowCount(f[0].length);
 
         int c = 0;
-        for (int i = 0; i < f.length; i++) {
+        for (int i = f.length-1; i >= 0; i--) {
             for (int j = 0; j < f[0].length; j++) {
                 EditText box = new EditText(this);
                 android.widget.TableRow.LayoutParams p = new android.widget.TableRow.LayoutParams();
@@ -99,8 +116,9 @@ public class PieceMatchHeatmapActivity extends AppCompatActivity {
                 imageview.setImageURI(Uri.parse(imagePath));
                 imageview.setRotation(90);
             }
+            progressBar.setVisibility(0);
             PieceMatchActivity.pieceid = Frisbee.uploadFile(imagePath);
-            Frisbee.notifyFlask(PieceMatchActivity.refid, PieceMatchActivity.pieceid, PieceMatchActivity.pieces);
+            Frisbee.notifyFlask(PieceMatchHeatmapActivity.this, PieceMatchActivity.refid, PieceMatchActivity.pieceid, PieceMatchActivity.pieces);
         }
         Log.d(TAG, imagePath);
     }
