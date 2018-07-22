@@ -1,0 +1,21 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+
+
+[packages]
+
+gunicorn = "*"
+flask = "*"
+pillow = "*"
+requests  = "*"
+cloudinary = "*"
+math = "*"
+numpy = "*"
+skimage = "*"
+functools = "*"
+
+[requires]
+
+python_version = "3.6"
