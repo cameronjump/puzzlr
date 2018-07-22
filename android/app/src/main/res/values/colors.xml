@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#039CBD</color>
-    <color name="colorPrimaryDark">#FF69B4</color>
-    <color name="colorAccent">#d11013</color>
+    <color name="colorPrimary">#b967ff</color>
+    <color name="colorPrimaryDark">#ff71ce</color>
+    <color name="colorAccent">#01cdfe</color>
     <color name="puzzleMain">#d3d3d3</color>
     <color name="puzzleSecondary">#FF69B4</color>
+    <color name="grad5">#FF69B4</color>
+    <color name="grad4">#E99EC3</color>
+    <color name="grad3">#DEB8CB</color>
+    <color name="grad2">#d3d3d3</color>
+    <color name="green">#05ffa1</color>
+    <color name="yellow">#fffb96</color>
+
 </resources>

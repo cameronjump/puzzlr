@@ -15,6 +15,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.ArrayList;
+
+import static room323.puzzlr.PieceMatchActivity.pieces;
 
 public class MyUtils {
 
@@ -69,8 +72,138 @@ public class MyUtils {
     }
 
     public static int getColor(Double d) {
-        if (d<.95) return R.color.puzzleMain;
-        else return R.color.puzzleSecondary;
+        if (d==1) return R.color.grad2;
+        else if (d>=.93) return R.color.grad5;
+        else if (d>=.87) return R.color.grad4;
+        else if (d>=.8) return R.color.grad3;
+        else return R.color.grad2;
     }
+
+    public static double[][] stringToArray(String s) {
+        String[] s1 = s.split("],[");
+        double[][] d = new double[s1.length][pieces/s1.length];
+        for (int i=0; i<s1.length; i++) {
+            String s2 = s1[i].replace("[","").replace("]", "");
+            String[] b = s2.split(",");
+            for (int j=0; j<b.length; j++) {
+                d[i][j] = Double.valueOf(b[j]);
+            }
+        }
+        return d;
+    }
+
+    public static double[][] camsMethod(String s) {
+        String[] a = s.replace("[","").replace("]","").split(",");
+        int row = Integer.valueOf(a[0]);
+        int height = Integer.valueOf(a[1]);
+        double[][] d = new double[row][height];
+        int r=0;
+        int h=0;
+        for (int i=2; i<a.length; i++) {
+            Log.d(TAG, "row" + String.valueOf(r) + " height" + String.valueOf(h));
+            d[h][r]=Double.parseDouble(a[i]);
+            if(h==row-1) {
+                h = 0;
+                r = r + 1;
+            }
+            else {
+                h = h + 1;
+            }
+        }
+        return d;
+    }
+
+    public static double[][] visaalsMethod(String arrString) {
+        // get rid of first bracket and last bracked
+        arrString = arrString.substring(1, arrString.length()-1);
+
+        String[] arrs = arrString.split("]");
+        int len = arrString.length();
+        int i = 0;
+        ArrayList<String> al = new ArrayList<>();
+        while (i < len) {
+            char curr = arrString.charAt(i);
+            if (curr == '[') {
+                String row = "";
+                i++;
+                while (arrString.charAt(i) != ']') {
+                    row += arrString.charAt(i);
+                    i++;
+                }
+
+                String rowArr = row;
+                al.add(rowArr);
+            }
+            i++;
+        }
+
+        double[][] ans = new double[al.size()][al.get(0).split(",").length];
+        int idx = 0;
+        for (String s: al) {
+            Log.d(TAG,s);
+
+            String[] temp = s.split(",");
+
+            double[] dtemp = new double[temp.length];
+            int didx = 0;
+            for (String ss: temp) {
+                dtemp[didx] = Double.parseDouble(ss);
+                didx++;
+            }
+
+            ans[idx] = dtemp;
+            idx++;
+        }
+
+        Log.d(TAG, "Length: " + ans.length);
+        Log.d(TAG, "width: " + ans[1].length);
+
+        for (i = 0; i < ans.length; i++) {
+            for (int j = 0; j < ans[0].length; j++) {
+                //Log.d(TAG,String.valueOf(ans[i][j]));
+            }
+
+        }
+
+        return ans;
+    }
+
+    public static double[][] visaalsSecondMethod(ArrayList<Double> arraylistname) {
+        int length = arraylistname.get(0).intValue();
+        int width = arraylistname.get(1).intValue();
+
+        double[][] ans = new double[length][width];
+
+        int idx = 2;
+        for (int i = 0; i < length; i++) {
+            for (int j = 0; j < width; j++) {
+                ans[i][j] = arraylistname.get(idx);
+                idx++;
+            }
+        }
+        return ans;
+    }
+
+
+
+    public static double[][] johnsMethod(String str) {
+        str = str.replaceAll("[^-?0-9.]+", " ");
+        ArrayList<Double> arrli = new ArrayList<Double>();
+        String[] integerStrings = str.split(" ");
+        for (String num : integerStrings){
+            System.out.println(num);
+            if (num.trim().length() > 0){
+                double nums = Double.parseDouble(num);
+                arrli.add(nums);
+            }
+        }
+        return visaalsSecondMethod(arrli);
+    }
+
+//    public static void logArray(double[][] array) {
+//        for(int i=0; array.length;i++) {
+//            for(int j=0; array[i])
+//        }
+//    }
 
 }
