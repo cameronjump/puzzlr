@@ -6,9 +6,9 @@ Won 'Most Creative Use of Cloudinary' at HackMidwest 2018
 
 [Cameron Jump](https://github.com/cameronjump/) - Android, UI, Cloudinary APIs
 
-[Visaal Ambalam](https://github.com/visaals/) - Image Processing Algorithm, Deployed Flask Server on Heroku
+[Visaal Ambalam](https://github.com/visaals/) -  Backend Image Processing, Setup Flask Server on Heroku
 
-[John Bisognano](https://github.com/johnbisognano) - Pattern Matching Algorithm, Cloudinary APIs
+[John Bisognano](https://github.com/johnbisognano) - Backend Image Processing, Cloudinary APIs
 
 ## Step 1: Upload the image of the entire puzzle and enter the number of puzzle pieces
 <p align="center">
