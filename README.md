@@ -1,14 +1,14 @@
 # puzzlr
 ###### _A computer vision puzzle solving app_ 
-User takes picture of puzzle and a piece. These pictures are uploaded to Cloudinary and formatted. App then sends request to Flask server with address of pictures. Flask server breaks the puzzle into N pieces and breaks each of those pieces into 4x4 grids and averages the colors in each element of the grid. The server converts the uploaded puzzle piece into the same 4x4 grid and averages the colors the same way. The server then compares each orientation of uploaded piece to each of the N pieces in the puzzle and returns the app a similarity heat map of where the piece matches.
+User takes picture of puzzle and a piece. These pictures are uploaded to Cloudinary to resize, rotate, trim, and remove the background of the pictures. App then sends request to Flask server deployed on Heroku with address of pictures. Flask server breaks the puzzle into N pieces and breaks each of those pieces into 4x4 grids and averages the colors in each element of the grid. The server converts the uploaded puzzle piece into the same 4x4 grid and averages the colors the same way. The server then compares each orientation of uploaded piece to each of the N pieces in the puzzle using MSE and returns the app a similarity heat map of where the piece matches.
 
 Won 'Most Creative Use of Cloudinary' at HackMidwest 2018
 
-[Cameron Jump](https://github.com/cameronjump/)
+[Cameron Jump](https://github.com/cameronjump/) - Android, UI, Cloudinary APIs
 
-[Visaal Ambalam](https://github.com/visaals/)
+[Visaal Ambalam](https://github.com/visaals/) - Image Processing Algorithm, Deployed Flask Server on Heroku
 
-[John Bisognano](https://github.com/johnbisognano)
+[John Bisognano](https://github.com/johnbisognano) - Pattern Matching Algorithm, Cloudinary APIs
 
 ## Step 1: Upload the image of the entire puzzle and enter the number of puzzle pieces
 <p align="center">
