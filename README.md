@@ -13,7 +13,7 @@ Won 'Most Creative Use of Cloudinary' at HackMidwest 2018
 
 ## Step 1: Upload the image of the entire puzzle and enter the number of puzzle pieces
 <div align="center">
-  <img src="http://res.cloudinary.com/puzzlr/image/upload/c_scale,q_100,w_200/v1532396480/43086292-9bb5293c-8e62-11e8-8b87-c2b98e4d754d.jpg/">
+  <img src="http://res.cloudinary.com/puzzlr/image/upload/c_scale,q_100,w_200/v1532396480/43086292-9bb5293c-8e62-11e8-8b87-c2b98e4d754d.jpg">
 ![screenshot_20180722-124052_puzzlr](http://res.cloudinary.com/puzzlr/image/upload/c_scale,q_100,w_200/v1532396480/43086292-9bb5293c-8e62-11e8-8b87-c2b98e4d754d.jpg)
 </div>
 
