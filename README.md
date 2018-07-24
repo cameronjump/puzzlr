@@ -1,5 +1,5 @@
 # puzzlr
-## A computer vision puzzle solving app 
+_A computer vision puzzle solving app_ 
 User takes picture of puzzle and a piece. These pictures are uploaded to Cloudinary and formatted. App then sends request to Flask server with address of pictures. Flask server breaks the puzzle into N pieces and breaks each of those pieces into 4x4 grids and averages the colors in each element of the grid. The server converts the uploaded puzzle piece into the same 4x4 grid and averages the colors the same way. The server then compares each orientation of uploaded piece to each of the N pieces in the puzzle and returns the app a similarity heat map of where the piece matches.
 
 Won 'Most Creative Use of Cloudinary' at HackMidwest 2018
@@ -12,9 +12,9 @@ Won 'Most Creative Use of Cloudinary' at HackMidwest 2018
 
 
 ## Step 1: Upload the image of the entire puzzle and enter the number of puzzle pieces
-<p align="center">
+<div align="center">
 ![screenshot_20180722-124052_puzzlr](http://res.cloudinary.com/puzzlr/image/upload/c_scale,q_100,w_200/v1532396480/43086292-9bb5293c-8e62-11e8-8b87-c2b98e4d754d.jpg)
-</p>
+</div>
 
 
 
