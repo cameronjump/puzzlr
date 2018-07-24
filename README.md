@@ -11,14 +11,21 @@ Won 'Most Creative Use of Cloudinary' at HackMidwest 2018
 [John Bisognano](https://github.com/johnbisognano)
 
 ## Step 1: Upload the image of the entire puzzle and enter the number of puzzle pieces
+<p align="center">
 <img align="center" src="http://res.cloudinary.com/puzzlr/image/upload/c_scale,q_100,w_200/v1532396480/43086292-9bb5293c-8e62-11e8-8b87-c2b98e4d754d.jpg">
+</p>
 
 ## Step 2: Upload or take an image of an individual puzzle piece after pressing this button
 #### For best performance, use a white background and avoid shadows when taking the image.
+<p align="center">
+
 <img align="center" src="http://res.cloudinary.com/puzzlr/image/upload/c_scale,q_100,w_200/v1532396459/43086293-9bc205ee-8e62-11e8-8a90-34e88946625d.jpg">
+</p>
 
 ## Step 3: Our algorithm will show on the heat map where your puzzle piece is most likely to fit. Brighter indicated better match
-<img align="center" src="http://res.cloudinary.com/puzzlr/image/upload/c_scale,q_100,w_200/v1532396471/43086291-9ba4fbac-8e62-11e8-9016-cf2f2299604f.jpg">
+<p align="center">
+  <img src="http://res.cloudinary.com/puzzlr/image/upload/c_scale,q_100,w_200/v1532396471/43086291-9ba4fbac-8e62-11e8-9016-cf2f2299604f.jpg">
+</p>
 
 
 
