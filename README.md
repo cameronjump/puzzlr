@@ -15,7 +15,7 @@ Won 'Most Creative Use of Cloudinary' at HackMidwest 2018
 <img align="center" src="http://res.cloudinary.com/puzzlr/image/upload/c_scale,q_100,w_200/v1532396480/43086292-9bb5293c-8e62-11e8-8b87-c2b98e4d754d.jpg">
 </p>
 
-## Step 2: Upload or take an image of an individual puzzle piece after pressing this button
+## Step 2: Upload or take an image of an individual puzzle piece after pressing the piece match button
 _For best performance, use a white background and avoid shadows when taking the image._
 <p align="center">
 <img align="center" src="http://res.cloudinary.com/puzzlr/image/upload/c_scale,q_100,w_200/v1532396459/43086293-9bc205ee-8e62-11e8-8a90-34e88946625d.jpg">
